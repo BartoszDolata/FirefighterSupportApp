@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FireFighter Support App</string>
+    <string name="pair">Rota</string>
+    <string name="enter">Wejście</string>
+    <string name="check">Pomiar</string>
+    <string name="textview">TextView</string>
+</resources>
