@@ -153,8 +153,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 if (location != null) {
 
-                    val latitude = Location.convert(location!!.latitude, Location.FORMAT_MINUTES)
-                    val longitude = Location.convert(location!!.longitude, Location.FORMAT_MINUTES)
+                    val latitude = Location.convert(location!!.latitude, Location.FORMAT_SECONDS)
+                    val longitude = Location.convert(location!!.longitude, Location.FORMAT_SECONDS)
 
                     drawMarker(location!!, getText(R.string.i_am_here).toString())
 
