@@ -8,4 +8,10 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="i_am_here">Tu jesteś</string>
     <string name="provider_failed">Brak dostępu</string>
+    <string name="starting_time">"0m 0s"</string>
+    <string name="start">START</string>
+    <string name="count">Oblicz</string>
+    <string name="finish">Zakończ</string>
+    <string name="remaining_time_text">Pozostały czas: </string>
+    <string name="remaining_time_on_start">30m 00s</string>
 </resources>

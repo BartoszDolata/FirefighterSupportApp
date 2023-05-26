@@ -71,7 +71,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Romek" />
+                />
 
             <EditText
                 android:id="@+id/ff1_check1"
@@ -81,7 +81,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/hint"
-                android:text="280" />
+                android:text="220"
+                />
 
             <EditText
                 android:id="@+id/ff1_check2"
@@ -124,7 +125,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Tomek" />
+                />
 
             <EditText
                 android:id="@+id/ff2_check1"
@@ -134,7 +135,7 @@
                 android:inputType="number"
                 android:gravity="center"
                 android:hint="@string/hint"
-                android:text="290" />
+                />
 
             <EditText
                 android:id="@+id/ff2_check2"
@@ -154,7 +155,7 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:hint="@string/hint"
-                android:text="" />
+                 />
 
             <EditText
                 android:id="@+id/ff2_check4"
@@ -178,8 +179,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:inputType="time"
-                android:text="12m 15s"
+                android:text="@string/starting_time"
                 android:textAlignment="center" />
 
             <Button
@@ -189,8 +189,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:inputType="numberDecimal"
-                android:text="Start" />
+                android:text="@string/start" />
 
             <Button
                 android:id="@+id/btn_check2"
@@ -199,8 +198,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:inputType="numberDecimal"
-                android:text="Oblicz" />
+                android:text="@string/count" />
 
             <Button
                 android:id="@+id/btn_check3"
@@ -209,8 +207,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:inputType="textPersonName"
-                android:text="Oblicz" />
+                android:text="@string/count" />
 
             <Button
                 android:id="@+id/btn_check4"
@@ -219,8 +216,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:inputType="textPersonName"
-                android:text="Oblicz" />
+                android:text="@string/count" />
         </TableRow>
 
         <LinearLayout
@@ -232,7 +228,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Zakończ" />
+                android:text="@string/finish" />
+
+            <TextView
+                android:id="@+id/remaining_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="@string/remaining_time_text"
+                android:gravity="right"/>
 
             <TextView
                 android:id="@+id/remaining_time"
@@ -240,8 +245,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Pozostały czas: 30m 20s"
-                android:textAlignment="center" />
+                android:text="@string/remaining_time_on_start"
+                />
 
         </LinearLayout>
 
