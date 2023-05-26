@@ -6,4 +6,6 @@
     <string name="textview">TextView</string>
     <string name="hint">BAR</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="i_am_here">Tu jesteś</string>
+    <string name="provider_failed">Brak dostępu</string>
 </resources>
