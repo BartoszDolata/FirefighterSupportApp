@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.brigade1, FireBrigadeFragment())
         ft.replace(R.id.brigade2, FireBrigadeFragment())
-        ft.replace(R.id.brigadeRic, FireBrigadeFragment())
+        ft.replace(R.id.brigadeRit, FireBrigadeFragment())
         ft.commit()
     }
 }

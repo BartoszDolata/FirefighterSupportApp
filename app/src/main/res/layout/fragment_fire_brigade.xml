@@ -77,7 +77,7 @@
                 android:id="@+id/ff1_check1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:inputType="number"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:hint="@string/hint"
@@ -88,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:inputType="number"
                 android:gravity="center"
                 android:hint="@string/hint"
                 android:text="" />
@@ -97,6 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:inputType="number"
                 android:gravity="center"
                 android:hint="@string/hint"
                 android:text="" />
@@ -106,6 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:inputType="number"
                 android:gravity="center"
                 android:hint="@string/hint"
                 android:text="" />
@@ -121,7 +124,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="textPersonName"
                 android:text="Tomek" />
 
             <EditText
@@ -129,8 +131,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:inputType="number"
                 android:gravity="center"
-                android:inputType="numberDecimal"
                 android:hint="@string/hint"
                 android:text="290" />
 
@@ -140,7 +142,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:hint="@string/hint"
                 android:text="" />
 
@@ -150,7 +152,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:hint="@string/hint"
                 android:text="" />
 
@@ -160,7 +162,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:hint="@string/hint"
                 android:text="" />
         </TableRow>
