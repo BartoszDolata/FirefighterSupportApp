@@ -3,13 +3,14 @@ package com.example.firefightersupportapp
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.location.LocationListener
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -151,7 +152,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                 }
                 if (location != null) {
+
+                    val latitude = Location.convert(location!!.latitude, Location.FORMAT_MINUTES)
+                    val longitude = Location.convert(location!!.longitude, Location.FORMAT_MINUTES)
+
                     drawMarker(location!!, getText(R.string.i_am_here).toString())
+
+                    val textView = findViewById<TextView>(R.id.coordinates)
+                    textView.text = String.format("Szerokość: %s\nDługość: %s", latitude, longitude)
+
+                    println("### LATITUDE_STR: $latitude")
+                    println("### LONGITUDE_STR: $longitude")
                 }
             }
         } else {
