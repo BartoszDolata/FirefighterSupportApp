@@ -8,6 +8,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var biding: ActivityMainBinding
     private lateinit var context: Context
     private lateinit var locationRequest: LocationRequest
+    private lateinit var db_button: Button
 
     @Suppress("DEPRECATION")
 
@@ -33,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(biding.root)
 
         context = this
-
+        db_button = findViewById(R.id.btn_database)
+        db_button.setOnClickListener { FireBrigadeFragment().saveToDatabase(context as MainActivity) }
 
         locationRequest = LocationRequest.create();
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY;

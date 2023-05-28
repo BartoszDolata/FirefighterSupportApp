@@ -6,46 +6,63 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <HorizontalScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scrollbars="horizontal"
-        tools:ignore="MissingConstraints">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/brigade1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:background="@drawable/border">
-            </FrameLayout>
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollbars="horizontal"
+            tools:ignore="MissingConstraints">
 
-            <FrameLayout
-                android:id="@+id/brigade2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:background="@drawable/border">
-            </FrameLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/brigadeRit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:background="@drawable/border_ric">
-            </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/brigade1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:background="@drawable/border">
+                </FrameLayout>
 
-        </LinearLayout>
+                <FrameLayout
+                    android:id="@+id/brigade2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:background="@drawable/border">
+                </FrameLayout>
 
-    </HorizontalScrollView>
+                <FrameLayout
+                    android:id="@+id/brigadeRit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:background="@drawable/border_ric">
+                </FrameLayout>
+
+                <Button
+                    android:id="@+id/btn_database"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/send_to_db" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

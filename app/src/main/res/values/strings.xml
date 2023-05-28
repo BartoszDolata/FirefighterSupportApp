@@ -14,4 +14,5 @@
     <string name="finish">Zakończ</string>
     <string name="remaining_time_text">Pozostały czas: </string>
     <string name="remaining_time_on_start">30m 00s</string>
+    <string name="send_to_db">WYŚLIJ DANE DO BAZY</string>
 </resources>
