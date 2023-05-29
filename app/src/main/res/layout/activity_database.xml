@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    tools:context=".DatabaseActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,56 +12,58 @@
         android:orientation="vertical">
 
         <TableLayout
+            android:id="@+id/table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_margin="5dp"
-            android:padding="5dp"
-            android:textSize="18dp"
-            android:layout_marginEnd="0dp"
-            android:paddingEnd="0dp"
-            android:id="@+id/table"
             android:background="@drawable/border"
-            tools:ignore="MissingConstraints">
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="5dp">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
-                android:textColor="@color/black"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:gravity="right"
-                android:text="@string/name"/>
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/name"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textAlignment="center"/>
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
-                android:textColor="@color/black"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:gravity="center_horizontal"
-                android:text="@string/surname" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/surname"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textAlignment="center"/>
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
-                android:textColor="@color/black"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:layout_marginEnd="0dp"
-                android:paddingEnd="0dp"
-                android:gravity="left"
-                android:text="@string/nick"/>
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_marginEnd="0dp"
+                    android:padding="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/nick"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textAlignment="center"/>
 
             </TableRow>
 
@@ -78,4 +81,4 @@
 
     </LinearLayout>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
