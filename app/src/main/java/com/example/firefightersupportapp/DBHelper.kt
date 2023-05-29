@@ -11,7 +11,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     override fun onCreate(db: SQLiteDatabase?) {
         val query = ("CREATE TABLE " + TABLE_NAME + " ("
-                + ID + " INTEGER PRIMARY KEY, " +
+                + ID + " SERIAL PRIMARY KEY, " +
                 NAME + " TEXT," +
                 SURNAME + " TEXT," +
                 NICK + " TEXT" + ")")
@@ -24,20 +24,20 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
-    fun addFirefighter(name : String, surname : String, nick : String){
+    fun addFirefighter(name : String, surname : String, nick : String): Long {
         val values = ContentValues()
         values.put(NAME, name)
         values.put(SURNAME, surname)
         values.put(NICK, nick)
         val db = this.writableDatabase
-        db.insert(TABLE_NAME, null, values)
+        val insert = db.insert(TABLE_NAME, null, values)
         db.close()
+        return insert
     }
 
     fun getFirefighters(): Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
-
     }
 
     companion object{

@@ -1,65 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".DatabaseActivity">
+    android:layout_height="wrap_content">
 
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        android:textSize="18dp"
-        android:layout_marginEnd="0dp"
-        android:paddingEnd="0dp"
-        android:id="@+id/table"
-        android:background="@drawable/border"
-        tools:ignore="MissingConstraints">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TableRow
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="20dp"
-            android:textColor="@color/black"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_margin="5dp"
             android:padding="5dp"
-            android:gravity="right"
-            android:text="@string/name"/>
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:gravity="center_horizontal"
-            android:text="@string/surname" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_margin="5dp"
-            android:padding="5dp"
+            android:textSize="18dp"
             android:layout_marginEnd="0dp"
             android:paddingEnd="0dp"
-            android:gravity="left"
-            android:text="@string/nick"/>
+            android:id="@+id/table"
+            android:background="@drawable/border"
+            tools:ignore="MissingConstraints">
 
-        </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </TableLayout>
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:gravity="right"
+                android:text="@string/name"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:gravity="center_horizontal"
+                android:text="@string/surname" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:layout_marginEnd="0dp"
+                android:paddingEnd="0dp"
+                android:gravity="left"
+                android:text="@string/nick"/>
+
+            </TableRow>
+
+        </TableLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/coordinator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_margin="16dp"
+            android:src="@drawable/outline_add_white"
+            android:onClick="onClickDone"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
+
+</ScrollView>
