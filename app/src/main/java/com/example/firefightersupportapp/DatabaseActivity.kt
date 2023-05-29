@@ -3,9 +3,9 @@ package com.example.firefightersupportapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Gravity
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 
@@ -75,12 +75,35 @@ class DatabaseActivity : AppCompatActivity() {
         }
 
         return data
+    }
 
-//        val f1 = listOf("Jan", "Kowalski", "Janek")
-//        val f = mutableListOf<List<String>>()
-//        f.add(f1)
-//
-//        return f
+    fun onClickDone(view: View?) {
+        val inflater: LayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView: View = inflater.inflate(R.layout.popup_window, null)
+
+        val width: Int = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height: Int = LinearLayout.LayoutParams.WRAP_CONTENT
+        val focusable = true
+
+        val popupWindow = PopupWindow(popupView, width, height, focusable)
+        popupWindow.elevation = 20F
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        val saveButton = popupView.findViewById<Button>(R.id.ok_button)
+        saveButton.setOnClickListener {
+
+            val name = popupView.findViewById<EditText>(R.id.et_name).text.toString()
+            val surname = popupView.findViewById<EditText>(R.id.et_surname).text.toString()
+            val nick = popupView.findViewById<EditText>(R.id.et_nick).text.toString()
+
+            print("### $name $surname $nick")
+            val added = database.addFirefighter(name, surname, nick)
+            if (added > 0) {
+                Toast.makeText(this@DatabaseActivity, "Dodano pomyślnie", Toast.LENGTH_SHORT).show()
+            }
+            popupWindow.dismiss()
+            renderView()
+        }
     }
 
 }

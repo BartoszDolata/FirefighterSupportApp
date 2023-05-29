@@ -3,13 +3,16 @@ package com.example.firefightersupportapp
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.example.firefightersupportapp.databinding.ActivityMainBinding
 import com.example.firefightersupportapp.databinding.FragmentFireBrigadeBinding
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -176,7 +179,6 @@ class FireBrigadeFragment : Fragment() {
         } else{
             println("Min pressure = "+ min_pressure)
         }
-        return min_pressure
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateTimeToEscape(lastMinPressure:Int, currentMinPressure: Int, lastTime: Date, currentTime: Date){
