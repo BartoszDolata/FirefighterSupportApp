@@ -179,6 +179,7 @@ class FireBrigadeFragment : Fragment() {
         } else{
             println("Min pressure = "+ min_pressure)
         }
+        return min_pressure
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateTimeToEscape(lastMinPressure:Int, currentMinPressure: Int, lastTime: Date, currentTime: Date){
@@ -202,7 +203,7 @@ class FireBrigadeFragment : Fragment() {
                 val seconds = (elapsedTime / 1000) % 60
 
 
-                timer = view.findViewById(R.id.Timer)
+                timer = view.findViewById<TextView>(R.id.Timer)
                 timer.text = String.format(
                     Locale.getDefault(),
                     "%02d:%02d:%02d",
@@ -232,7 +233,7 @@ class FireBrigadeFragment : Fragment() {
                 val seconds = (elapsedTime / 1000) % 60
 
 
-                timer = view.findViewById(R.id.remaining_time)
+                timer = view.findViewById<TextView>(R.id.remaining_time)
                 timer.text = String.format(
                     Locale.getDefault(),
                     "%02dh %02dm %02ds",
