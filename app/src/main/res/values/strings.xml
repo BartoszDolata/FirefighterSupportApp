@@ -14,5 +14,8 @@
     <string name="finish">Zakończ</string>
     <string name="remaining_time_text">Pozostały czas: </string>
     <string name="remaining_time_on_start">30m 00s</string>
-    <string name="send_to_db">WYŚLIJ DANE DO BAZY</string>
+    <string name="goto_db">BAZA STRAŻAKÓW</string>
+    <string name="name">IMIĘ</string>
+    <string name="surname">NAZWISKO</string>
+    <string name="nick">PSEUDONIM</string>
 </resources>

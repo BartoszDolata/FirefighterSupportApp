@@ -57,7 +57,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:text="@string/send_to_db" />
+                    android:text="@string/goto_db" />
 
             </LinearLayout>
 

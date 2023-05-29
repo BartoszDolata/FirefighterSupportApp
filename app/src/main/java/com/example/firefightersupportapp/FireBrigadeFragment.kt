@@ -1,19 +1,26 @@
 package com.example.firefightersupportapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.example.firefightersupportapp.databinding.ActivityMainBinding
+import com.example.firefightersupportapp.databinding.FragmentFireBrigadeBinding
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.ceil
 
 
 class FireBrigadeFragment : Fragment() {
+
+    private lateinit var binding: FragmentFireBrigadeBinding
 
     private lateinit var view: View
     private lateinit var btn_check1: Button
@@ -57,7 +64,6 @@ class FireBrigadeFragment : Fragment() {
         ff1_check4 = view.findViewById(R.id.ff1_check4)
         ff2_check4 = view.findViewById(R.id.ff2_check4)
         btn_check4 = view.findViewById(R.id.btn_check4)
-
         btn_end = view.findViewById(R.id.btn_end1)
 
         btn_check1.setOnClickListener {
@@ -219,9 +225,4 @@ class FireBrigadeFragment : Fragment() {
     private fun stopTimerDown() {
         runnable?.let { handler?.removeCallbacks(it) }
     }
-
-    fun saveToDatabase(context: MainActivity) {
-        Toast.makeText(context, "Wysyłam dane...", Toast.LENGTH_SHORT).show()
-    }
-
 }

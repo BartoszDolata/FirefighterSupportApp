@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var context: Context
     private lateinit var locationRequest: LocationRequest
     private lateinit var db_button: Button
-
     @Suppress("DEPRECATION")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +34,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(biding.root)
 
         context = this
-        db_button = findViewById(R.id.btn_database)
-        db_button.setOnClickListener { FireBrigadeFragment().saveToDatabase(context as MainActivity) }
 
-        locationRequest = LocationRequest.create();
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY;
-        locationRequest.interval = 5000;
-        locationRequest.fastestInterval = 2000;
+        db_button = findViewById(R.id.btn_database)
+        db_button.setOnClickListener {
+            val i = Intent(this@MainActivity, DatabaseActivity::class.java)
+            startActivity(i)
+        }
+
+        locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 5000
+        locationRequest.fastestInterval = 2000
 
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.brigade1, FireBrigadeFragment())
@@ -107,11 +110,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun isGPSEnabled(): Boolean {
         var locationManager: LocationManager? = null
-        var isEnabled = false
         if (locationManager == null) {
             locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         }
-        isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        return isEnabled
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 }
