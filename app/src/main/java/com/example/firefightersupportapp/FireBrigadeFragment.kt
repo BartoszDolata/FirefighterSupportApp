@@ -71,6 +71,19 @@ class FireBrigadeFragment : Fragment() {
         btn_check4 = view.findViewById(R.id.btn_check4)
         btn_end = view.findViewById(R.id.btn_end1)
 
+        val f1_spinner = view.findViewById<Spinner>(R.id.firefighter1)
+        val f2_spinner = view.findViewById<Spinner>(R.id.firefighter2)
+        val options = DBHelper(requireContext(), null).getNames()
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            options
+        )
+        f1_spinner.adapter = adapter
+        f1_spinner.setSelection(options.indexOf(""))
+        f2_spinner.adapter = adapter
+        f2_spinner.setSelection(options.indexOf(""))
+
         btn_check1.setOnClickListener {
             val minPressure = getMinPressure(ff1_check1, ff2_check1)
             val parentView = btn_check1.parent as ViewGroup
