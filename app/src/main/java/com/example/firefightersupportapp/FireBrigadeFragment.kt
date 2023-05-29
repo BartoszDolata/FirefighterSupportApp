@@ -1,19 +1,18 @@
 package com.example.firefightersupportapp
 
-import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.firefightersupportapp.databinding.ActivityMainBinding
 import com.example.firefightersupportapp.databinding.FragmentFireBrigadeBinding
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 import kotlin.math.ceil
 
@@ -41,12 +40,15 @@ class FireBrigadeFragment : Fragment() {
     private var startTime: Long = 0
     private var handler: Handler? = null
     private var runnable: Runnable? = null
-    private var remainingTime: Long = 30*60*1000
+    private var remainingTime: Long = 0
+    private var lastTime: Date = Date()
+    private var lastMinPressure: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,7 +69,7 @@ class FireBrigadeFragment : Fragment() {
         btn_end = view.findViewById(R.id.btn_end1)
 
         btn_check1.setOnClickListener {
-            setTimeToEscape(ff1_check1, ff2_check1)
+            val minPressure = getMinPressure(ff1_check1, ff2_check1)
             val parentView = btn_check1.parent as ViewGroup
             val buttonIndex = parentView.indexOfChild(btn_check1)
             parentView.removeView(btn_check1)
@@ -79,11 +81,15 @@ class FireBrigadeFragment : Fragment() {
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check1.layoutParams)
             startTimer()
+            remainingTime = (((minPressure*6)/50)*60*1000).toLong()
+//            println(remainingTime)
+            lastTime = Date()
+            lastMinPressure = minPressure
             startTimerDown(remainingTime)
         }
 
         btn_check2.setOnClickListener {
-            setTimeToEscape(ff1_check2, ff2_check2)
+            val minPressure = getMinPressure(ff1_check2, ff2_check2)
             val parentView = btn_check2.parent as ViewGroup
             val buttonIndex = parentView.indexOfChild(btn_check2)
             parentView.removeView(btn_check2)
@@ -94,10 +100,13 @@ class FireBrigadeFragment : Fragment() {
             textView.text = formattedDate
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check2.layoutParams)
+            updateTimeToEscape(lastMinPressure,minPressure,lastTime,Date())
+            lastTime = Date()
+            lastMinPressure = minPressure
         }
 
         btn_check3.setOnClickListener {
-            setTimeToEscape(ff1_check3, ff2_check3)
+            val minPressure = getMinPressure(ff1_check3, ff2_check3)
             val parentView = btn_check3.parent as ViewGroup
             val buttonIndex = parentView.indexOfChild(btn_check3)
             parentView.removeView(btn_check3)
@@ -108,9 +117,12 @@ class FireBrigadeFragment : Fragment() {
             textView.text = formattedDate
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check3.layoutParams)
+            updateTimeToEscape(lastMinPressure,minPressure,lastTime,Date())
+            lastTime = Date()
+            lastMinPressure = minPressure
         }
         btn_check4.setOnClickListener {
-            setTimeToEscape(ff1_check4, ff2_check4)
+            val minPressure = getMinPressure(ff1_check4, ff2_check4)
             val parentView = btn_check4.parent as ViewGroup
             val buttonIndex = parentView.indexOfChild(btn_check4)
             parentView.removeView(btn_check4)
@@ -121,6 +133,9 @@ class FireBrigadeFragment : Fragment() {
             textView.text = formattedDate
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check4.layoutParams)
+            updateTimeToEscape(lastMinPressure,minPressure,lastTime,Date())
+            lastTime = Date()
+            lastMinPressure = minPressure
         }
         btn_end.setOnClickListener {
             stopTimer()
@@ -130,7 +145,7 @@ class FireBrigadeFragment : Fragment() {
         return view
     }
 
-    private fun setTimeToEscape(p1:EditText,p2:EditText){
+    private fun getMinPressure(p1:EditText,p2:EditText): Int {
         val p1_val = p1.text.toString().toIntOrNull()
         val p2_val = p2.text.toString().toIntOrNull()
         var min_pressure = 0
@@ -159,12 +174,21 @@ class FireBrigadeFragment : Fragment() {
         if((min_pressure-50)<0){
             print("No time to go inside smoke")
         } else{
-            println("Time to go inside = "+ ceil(((min_pressure-50) *6/50).toDouble()))
+            println("Min pressure = "+ min_pressure)
         }
+        return min_pressure
     }
-//    private fun changeTimeToEscape(p1:EditText,p2:EditText){
-//
-//    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun updateTimeToEscape(lastMinPressure:Int, currentMinPressure: Int, lastTime: Date, currentTime: Date){
+        var minutes = Duration.between(lastTime.toInstant(), currentTime.toInstant()).toMinutes()
+        if (minutes < 1){
+            minutes = 1
+        }
+        println((currentMinPressure*6)/((lastMinPressure-currentMinPressure)*6/minutes))
+        var timeToEscape = (currentMinPressure*6)/((lastMinPressure-currentMinPressure)*6/minutes)
+        remainingTime = timeToEscape*60*1000
+        startTimerDown(remainingTime)
+    }
     private fun startTimer() {
         startTime = System.currentTimeMillis()
         handler = Handler()
