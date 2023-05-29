@@ -1,17 +1,13 @@
 package com.example.firefightersupportapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.example.firefightersupportapp.databinding.ActivityMainBinding
 import com.example.firefightersupportapp.databinding.FragmentFireBrigadeBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,6 +61,20 @@ class FireBrigadeFragment : Fragment() {
         ff2_check4 = view.findViewById(R.id.ff2_check4)
         btn_check4 = view.findViewById(R.id.btn_check4)
         btn_end = view.findViewById(R.id.btn_end1)
+
+
+        val f1_spinner = view.findViewById<Spinner>(R.id.firefighter1)
+        val f2_spinner = view.findViewById<Spinner>(R.id.firefighter2)
+        val options = DBHelper(requireContext(), null).getNames()
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            options
+        )
+        f1_spinner.adapter = adapter
+        f1_spinner.setSelection(options.indexOf(""))
+        f2_spinner.adapter = adapter
+        f2_spinner.setSelection(options.indexOf(""))
 
         btn_check1.setOnClickListener {
             setTimeToEscape(ff1_check1, ff2_check1)

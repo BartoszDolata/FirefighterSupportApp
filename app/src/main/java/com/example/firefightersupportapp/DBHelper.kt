@@ -1,5 +1,6 @@
 package com.example.firefightersupportapp
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -38,6 +39,24 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getFirefighters(): Cursor? {
         val db = this.readableDatabase
         return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+    }
+
+    @SuppressLint("Range")
+    fun getNames(): List<String> {
+        val cursor = getFirefighters()
+        val listData = mutableListOf<String>()
+
+        if (cursor!!.moveToFirst()) {
+            do {
+                listData.add(String.format("%s %s - %s",
+                    cursor.getString(cursor.getColumnIndex(NAME)),
+                    cursor.getString(cursor.getColumnIndex(SURNAME)),
+                    cursor.getString(cursor.getColumnIndex(NICK))))
+            }
+            while (cursor.moveToNext())
+        }
+        listData.add("")
+        return listData
     }
 
     companion object{

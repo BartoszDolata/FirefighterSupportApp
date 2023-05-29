@@ -99,7 +99,6 @@ class DatabaseActivity : AppCompatActivity() {
             print("### $name $surname $nick")
             val added = database.addFirefighter(name, surname, nick)
             if (added > 0) {
-                Toast.makeText(this@DatabaseActivity, nick, Toast.LENGTH_SHORT).show()
                 Toast.makeText(this@DatabaseActivity, "Dodano pomyślnie", Toast.LENGTH_SHORT).show()
             }
             popupWindow.dismiss()
