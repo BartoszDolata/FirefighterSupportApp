@@ -1,5 +1,6 @@
 package com.example.firefightersupportapp
 
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -13,11 +14,22 @@ import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class FireBrigadeFragment : Fragment() {
 
     private lateinit var view: View
+    private lateinit var timer: TextView
+    private lateinit var btn_end: Button
+
+    private var handler: Handler? = null
+    private var handlerDown: Handler? = null
+    private var runnable: Runnable? = null
+    private var runnableDown: Runnable? = null
+    private var lastTime: Date = Date()
+    private var lastMinPressure: Int = 0
+
     private lateinit var btn_check1: Button
     private lateinit var ff1_check1: EditText
     private lateinit var ff2_check1: EditText
@@ -28,42 +40,25 @@ class FireBrigadeFragment : Fragment() {
     private lateinit var ff1_check3: EditText
     private lateinit var ff2_check3: EditText
     private lateinit var btn_check4: Button
-    private lateinit var btn_end: Button
     private lateinit var ff1_check4: EditText
     private lateinit var ff2_check4: EditText
-    private lateinit var timer: TextView
-
-    private var handler: Handler? = null
-    private var handlerDown: Handler? = null
-    private var runnable: Runnable? = null
-    private var runnableDown: Runnable? = null
-    private var lastTime: Date = Date()
-    private var lastMinPressure: Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         view = inflater.inflate(R.layout.fragment_fire_brigade, container, false)
-        ff1_check1 = view.findViewById(R.id.ff1_check1)
-        ff2_check1 = view.findViewById(R.id.ff2_check1)
-        btn_check1 = view.findViewById(R.id.btn_check1)
-        ff1_check2 = view.findViewById(R.id.ff1_check2)
-        ff2_check2 = view.findViewById(R.id.ff2_check2)
-        btn_check2 = view.findViewById(R.id.btn_check2)
-        ff1_check3 = view.findViewById(R.id.ff1_check3)
-        ff2_check3 = view.findViewById(R.id.ff2_check3)
-        btn_check3 = view.findViewById(R.id.btn_check3)
-        ff1_check4 = view.findViewById(R.id.ff1_check4)
-        ff2_check4 = view.findViewById(R.id.ff2_check4)
-        btn_check4 = view.findViewById(R.id.btn_check4)
+        timer = view.findViewById(R.id.Timer)
         btn_end = view.findViewById(R.id.btn_end1)
 
+        setupButtonListener(R.id.btn_check1, R.id.ff1_check1, R.id.ff2_check1)
+        setupButtonListener(R.id.btn_check2, R.id.ff1_check2, R.id.ff2_check2)
+        setupButtonListener(R.id.btn_check3, R.id.ff1_check3, R.id.ff2_check3)
+        setupButtonListener(R.id.btn_check4, R.id.ff1_check4, R.id.ff2_check4)
         val f1_spinner = view.findViewById<Spinner>(R.id.firefighter1)
         val f2_spinner = view.findViewById<Spinner>(R.id.firefighter2)
         val options = DBHelper(requireContext(), null).getNames()
@@ -77,82 +72,6 @@ class FireBrigadeFragment : Fragment() {
         f2_spinner.adapter = adapter
         f2_spinner.setSelection(options.indexOf(""))
 
-        btn_check1.setOnClickListener {
-            val minPressure = getMinPressure(ff1_check1, ff2_check1)
-            val parentView = btn_check1.parent as ViewGroup
-            val buttonIndex = parentView.indexOfChild(btn_check1)
-            parentView.removeView(btn_check1)
-            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val currentDate = Date()
-            val formattedDate = dateFormat.format(currentDate)
-            val textView = TextView(requireActivity())
-            textView.text = formattedDate
-            textView.gravity = Gravity.CENTER
-            parentView.addView(textView, buttonIndex, btn_check1.layoutParams)
-            startTimer()
-            lastTime = Date()
-            lastMinPressure = minPressure
-            stopTimerDown()
-            startTimerDown((((minPressure * 6) / 50) * 60 * 1000).toLong())
-        }
-
-        btn_check2.setOnClickListener {
-            val minPressure = getMinPressure(ff1_check2, ff2_check2)
-            val parentView = btn_check2.parent as ViewGroup
-            val buttonIndex = parentView.indexOfChild(btn_check2)
-            parentView.removeView(btn_check2)
-            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val currentDate = Date()
-            val formattedDate = dateFormat.format(currentDate)
-            val textView = TextView(requireActivity())
-            textView.text = formattedDate
-            textView.gravity = Gravity.CENTER
-            parentView.addView(textView, buttonIndex, btn_check2.layoutParams)
-            val remainingTime = updateTimeToEscape(lastMinPressure, minPressure, lastTime, Date())
-            lastTime = Date()
-            lastMinPressure = minPressure
-            stopTimerDown()
-            startTimerDown(remainingTime)
-        }
-
-        btn_check3.setOnClickListener {
-            val minPressure = getMinPressure(ff1_check3, ff2_check3)
-            val parentView = btn_check3.parent as ViewGroup
-            val buttonIndex = parentView.indexOfChild(btn_check3)
-            parentView.removeView(btn_check3)
-            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val currentDate = Date()
-            val formattedDate = dateFormat.format(currentDate)
-            val textView = TextView(requireActivity())
-            textView.text = formattedDate
-            textView.gravity = Gravity.CENTER
-            parentView.addView(textView, buttonIndex, btn_check3.layoutParams)
-            val remainingTime = updateTimeToEscape(lastMinPressure, minPressure, lastTime, Date())
-            lastTime = Date()
-            lastMinPressure = minPressure
-            stopTimerDown()
-            startTimerDown(remainingTime)
-        }
-
-        btn_check4.setOnClickListener {
-            val minPressure = getMinPressure(ff1_check4, ff2_check4)
-            val parentView = btn_check4.parent as ViewGroup
-            val buttonIndex = parentView.indexOfChild(btn_check4)
-            parentView.removeView(btn_check4)
-            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val currentDate = Date()
-            val formattedDate = dateFormat.format(currentDate)
-            val textView = TextView(requireActivity())
-            textView.text = formattedDate
-            textView.gravity = Gravity.CENTER
-            parentView.addView(textView, buttonIndex, btn_check4.layoutParams)
-            val remainingTime = updateTimeToEscape(lastMinPressure, minPressure, lastTime, Date())
-            lastTime = Date()
-            lastMinPressure = minPressure
-            stopTimerDown()
-            startTimerDown(remainingTime)
-        }
-
         btn_end.setOnClickListener {
             stopTimer()
             stopTimerDown()
@@ -161,48 +80,91 @@ class FireBrigadeFragment : Fragment() {
         return view
     }
 
-    private fun getMinPressure(p1: EditText, p2: EditText): Int {
-        val p1_val = p1.text.toString().toIntOrNull()
-        val p2_val = p2.text.toString().toIntOrNull()
-        var min_pressure = 0
-        if (p1_val != null && p2_val != null) {
-            if (p1_val > p2_val) {
-                println("p1 is greater than or similar to p2")
-                min_pressure = p2_val;
-            } else {
-                println("p2 is greater than or similar to p1")
-                min_pressure = p1_val;
-            }
-        } else {
-            if (p1_val == null && p2_val == null) {
-                println("ERRROR")
-            } else {
-                if (p1_val == null && p2_val != null) {
-                    println(p2_val)
-                    min_pressure = p2_val
+    private fun setupButtonListener(
+        buttonId: Int,
+        ff1Id: Int,
+        ff2Id: Int
+    ) {
+        val button = view.findViewById<Button>(buttonId)
+        val ff1 = view.findViewById<EditText>(ff1Id)
+        val ff2 = view.findViewById<EditText>(ff2Id)
 
-                } else if (p1_val != null) {
-                    println(p1_val)
-                    min_pressure = p1_val;
+        button.setOnClickListener {
+            var ff1_val = ff1.text.toString().toIntOrNull()
+            var ff2_val = ff2.text.toString().toIntOrNull()
+            if(ff1_val == null || ff2_val == null){
+                showAlertDialog("Uwaga", "Wartości ciśnienia strażaków nie mogą pozostać puste")
+            } else {
+                if(ff1_val<0 || ff1_val>350 || ff2_val<0 || ff2_val>350){
+                    showAlertDialog("Uwaga", "Wartości ciśnienia strażaków muszą być w zakresie [0:350]")
+                } else {
+                    val minPressure = getMinPressure(ff1_val, ff2_val)
+                    val parentView = button.parent as ViewGroup
+                    val buttonIndex = parentView.indexOfChild(button)
+                    parentView.removeView(button)
+                    val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    val currentDate = Date()
+                    val formattedDate = dateFormat.format(currentDate)
+                    val textView = TextView(requireActivity())
+                    textView.text = formattedDate
+                    textView.gravity = Gravity.CENTER
+                    parentView.addView(textView, buttonIndex, button.layoutParams)
+                    if (button.id == R.id.btn_check1) {
+                        startTimer()
+                        lastTime = Date()
+                        lastMinPressure = minPressure
+                        stopTimerDown()
+                        startTimerDown((((minPressure * 6) / 50) * 60 * 1000).toLong())
+                    } else {
+                        val remainingTime = updateTimeToEscape(lastMinPressure, minPressure, lastTime, Date())
+                        lastTime = Date()
+                        lastMinPressure = minPressure
+                        stopTimerDown()
+                        startTimerDown(remainingTime)
+                    }
                 }
             }
+
         }
+    }
+    private fun showAlertDialog(title: String, message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+    private fun getMinPressure(p1: Int, p2: Int): Int {
+        var min_pressure = 0
+
+        if (p1 > p2) {
+            println("p1 is greater than or similar to p2")
+            min_pressure = p2;
+        } else {
+            println("p2 is greater than or similar to p1")
+            min_pressure = p1;
+        }
+
         if ((min_pressure - 50) < 0) {
-            print("No time to go inside smoke")
+            showAlertDialog("Uwaga", "Przekroczono bezpieczną granicę ciśnienia")
         } else {
             println("Min pressure = $min_pressure")
         }
         return min_pressure
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
+
     private fun updateTimeToEscape(
         lastMinPressure: Int,
         currentMinPressure: Int,
         lastTime: Date,
         currentTime: Date
     ): Long {
-        var minutes = Duration.between(lastTime.toInstant(), currentTime.toInstant()).toMinutes()
+        var minutes = TimeUnit.MILLISECONDS.toMinutes(currentTime.time - lastTime.time)
         if (minutes < 1) {
             minutes = 1
         }
@@ -211,6 +173,7 @@ class FireBrigadeFragment : Fragment() {
             (currentMinPressure * 6) / ((lastMinPressure - currentMinPressure) * 6 / minutes)
         return timeToEscape * 60 * 1000
     }
+
 
     private fun startTimer() {
         var elapsedTime: Int

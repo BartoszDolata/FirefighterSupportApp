@@ -2,12 +2,15 @@ package com.example.firefightersupportapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Layout.Alignment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
+import java.awt.font.TextAttribute
 
 
 class DatabaseActivity : AppCompatActivity() {
@@ -23,39 +26,41 @@ class DatabaseActivity : AppCompatActivity() {
     private fun renderView() {
         val firefighters = getData()
 
-        val table = this@DatabaseActivity.findViewById(R.id.table) as TableLayout
+        val table = findViewById(R.id.table) as TableLayout
         for (firefighter in firefighters) {
             val tr = TableRow(this)
-            tr.layoutParams = TableRow.LayoutParams(
-                TableRow.LayoutParams.FILL_PARENT,
-                TableRow.LayoutParams.WRAP_CONTENT
-            )
 
             val name = TextView(this)
             name.text = firefighter[0]
-            name.gravity = Gravity.LEFT
             name.textSize = 15.0F
             name.setPadding(5)
-            tr.addView(name)
 
             val surname = TextView(this)
             surname.text = firefighter[1]
-            surname.gravity = Gravity.CENTER_HORIZONTAL
-            tr.addView(surname)
+
 
             val nick = TextView(this)
             nick.text = firefighter[2]
-            nick.gravity = Gravity.RIGHT
+
+
+            tr.addView(name)
+            tr.addView(surname)
             tr.addView(nick)
 
-            table.addView(
-                tr,
-                TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.FILL_PARENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT
-                )
+            // Ustaw szerokość kolumn
+            val weightSum = 3.0f // Suma wag kolumn
+            val params = TableRow.LayoutParams(
+                0,
+                TableRow.LayoutParams.WRAP_CONTENT,
+                1.0f / weightSum
             )
+            name.layoutParams = params
+            surname.layoutParams = params
+            nick.layoutParams = params
+
+            table.addView(tr)
         }
+
         table.requestLayout()
     }
 
