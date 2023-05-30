@@ -3,26 +3,19 @@ package com.example.firefightersupportapp
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.firefightersupportapp.databinding.ActivityMainBinding
-import com.example.firefightersupportapp.databinding.FragmentFireBrigadeBinding
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
-import kotlin.math.ceil
 
 
 class FireBrigadeFragment : Fragment() {
-
-    private lateinit var binding: FragmentFireBrigadeBinding
 
     private lateinit var view: View
     private lateinit var btn_check1: Button
@@ -40,10 +33,10 @@ class FireBrigadeFragment : Fragment() {
     private lateinit var ff2_check4: EditText
     private lateinit var timer: TextView
 
-    private var startTime: Long = 0
     private var handler: Handler? = null
+    private var handlerDown: Handler? = null
     private var runnable: Runnable? = null
-    private var remainingTime: Long = 0
+    private var runnableDown: Runnable? = null
     private var lastTime: Date = Date()
     private var lastMinPressure: Int = 0
 
@@ -97,11 +90,10 @@ class FireBrigadeFragment : Fragment() {
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check1.layoutParams)
             startTimer()
-            remainingTime = (((minPressure*6)/50)*60*1000).toLong()
-//            println(remainingTime)
             lastTime = Date()
             lastMinPressure = minPressure
-            startTimerDown(remainingTime)
+            stopTimerDown()
+            startTimerDown((((minPressure * 6) / 50) * 60 * 1000).toLong())
         }
 
         btn_check2.setOnClickListener {
@@ -116,9 +108,11 @@ class FireBrigadeFragment : Fragment() {
             textView.text = formattedDate
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check2.layoutParams)
-            updateTimeToEscape(lastMinPressure,minPressure,lastTime,Date())
+            val remainingTime = updateTimeToEscape(lastMinPressure, minPressure, lastTime, Date())
             lastTime = Date()
             lastMinPressure = minPressure
+            stopTimerDown()
+            startTimerDown(remainingTime)
         }
 
         btn_check3.setOnClickListener {
@@ -133,10 +127,13 @@ class FireBrigadeFragment : Fragment() {
             textView.text = formattedDate
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check3.layoutParams)
-            updateTimeToEscape(lastMinPressure,minPressure,lastTime,Date())
+            val remainingTime = updateTimeToEscape(lastMinPressure, minPressure, lastTime, Date())
             lastTime = Date()
             lastMinPressure = minPressure
+            stopTimerDown()
+            startTimerDown(remainingTime)
         }
+
         btn_check4.setOnClickListener {
             val minPressure = getMinPressure(ff1_check4, ff2_check4)
             val parentView = btn_check4.parent as ViewGroup
@@ -149,10 +146,13 @@ class FireBrigadeFragment : Fragment() {
             textView.text = formattedDate
             textView.gravity = Gravity.CENTER
             parentView.addView(textView, buttonIndex, btn_check4.layoutParams)
-            updateTimeToEscape(lastMinPressure,minPressure,lastTime,Date())
+            val remainingTime = updateTimeToEscape(lastMinPressure, minPressure, lastTime, Date())
             lastTime = Date()
             lastMinPressure = minPressure
+            stopTimerDown()
+            startTimerDown(remainingTime)
         }
+
         btn_end.setOnClickListener {
             stopTimer()
             stopTimerDown()
@@ -161,62 +161,70 @@ class FireBrigadeFragment : Fragment() {
         return view
     }
 
-    private fun getMinPressure(p1:EditText,p2:EditText): Int {
+    private fun getMinPressure(p1: EditText, p2: EditText): Int {
         val p1_val = p1.text.toString().toIntOrNull()
         val p2_val = p2.text.toString().toIntOrNull()
         var min_pressure = 0
         if (p1_val != null && p2_val != null) {
             if (p1_val > p2_val) {
                 println("p1 is greater than or similar to p2")
-                min_pressure=p2_val;
+                min_pressure = p2_val;
             } else {
                 println("p2 is greater than or similar to p1")
-                min_pressure=p1_val;
+                min_pressure = p1_val;
             }
         } else {
-            if(p1_val == null && p2_val == null){
+            if (p1_val == null && p2_val == null) {
                 println("ERRROR")
-            }else{
-                if(p1_val == null && p2_val != null) {
+            } else {
+                if (p1_val == null && p2_val != null) {
                     println(p2_val)
-                    min_pressure=p2_val
+                    min_pressure = p2_val
 
-                }else if(p1_val != null){
+                } else if (p1_val != null) {
                     println(p1_val)
-                    min_pressure=p1_val;
+                    min_pressure = p1_val;
                 }
             }
         }
-        if((min_pressure-50)<0){
+        if ((min_pressure - 50) < 0) {
             print("No time to go inside smoke")
-        } else{
-            println("Min pressure = "+ min_pressure)
+        } else {
+            println("Min pressure = $min_pressure")
         }
         return min_pressure
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun updateTimeToEscape(lastMinPressure:Int, currentMinPressure: Int, lastTime: Date, currentTime: Date){
+    private fun updateTimeToEscape(
+        lastMinPressure: Int,
+        currentMinPressure: Int,
+        lastTime: Date,
+        currentTime: Date
+    ): Long {
         var minutes = Duration.between(lastTime.toInstant(), currentTime.toInstant()).toMinutes()
-        if (minutes < 1){
+        if (minutes < 1) {
             minutes = 1
         }
-        println((currentMinPressure*6)/((lastMinPressure-currentMinPressure)*6/minutes))
-        var timeToEscape = (currentMinPressure*6)/((lastMinPressure-currentMinPressure)*6/minutes)
-        remainingTime = timeToEscape*60*1000
-        startTimerDown(remainingTime)
+        println((currentMinPressure * 6) / ((lastMinPressure - currentMinPressure) * 6 / minutes))
+        val timeToEscape =
+            (currentMinPressure * 6) / ((lastMinPressure - currentMinPressure) * 6 / minutes)
+        return timeToEscape * 60 * 1000
     }
+
     private fun startTimer() {
-        startTime = System.currentTimeMillis()
+        var elapsedTime: Int
+        val startTime = System.currentTimeMillis()
         handler = Handler()
         runnable = object : Runnable {
             override fun run() {
-                val elapsedTime = System.currentTimeMillis() - startTime
-                val hours = (elapsedTime/1000) /3600
+                elapsedTime = (System.currentTimeMillis() - startTime).toInt()
+
+                val hours = (elapsedTime / 1000) / 3600
                 val minutes = (elapsedTime / 1000) / 60
                 val seconds = (elapsedTime / 1000) % 60
 
-
-                timer = view.findViewById<TextView>(R.id.Timer)
+                timer = view.findViewById(R.id.Timer)
                 timer.text = String.format(
                     Locale.getDefault(),
                     "%02d:%02d:%02d",
@@ -235,18 +243,20 @@ class FireBrigadeFragment : Fragment() {
     private fun stopTimer() {
         runnable?.let { handler?.removeCallbacks(it) }
     }
+
     private fun startTimerDown(remainingTime: Long) {
-        startTime = System.currentTimeMillis()
-        handler = Handler()
-        runnable = object : Runnable {
+        var elapsedTime: Int
+        val startTime = System.currentTimeMillis()
+        handlerDown = Handler()
+        runnableDown = object : Runnable {
             override fun run() {
-                val elapsedTime = remainingTime + startTime - System.currentTimeMillis() + 1000
-                val hours = (elapsedTime/1000) /3600
+                elapsedTime = (remainingTime + startTime - System.currentTimeMillis() + 1000).toInt()
+
+                val hours = (elapsedTime / 1000) / 3600
                 val minutes = (elapsedTime / 1000) / 60
                 val seconds = (elapsedTime / 1000) % 60
 
-
-                timer = view.findViewById<TextView>(R.id.remaining_time)
+                timer = view.findViewById(R.id.remaining_time)
                 timer.text = String.format(
                     Locale.getDefault(),
                     "%02dh %02dm %02ds",
@@ -255,14 +265,19 @@ class FireBrigadeFragment : Fragment() {
                     seconds
                 )
 
-                handler?.postDelayed(this, 10)
+                if (hours <= 0 && minutes <= 0 && seconds <= 0) {
+                    stopTimer()
+                    stopTimerDown()
+                } else {
+                    handlerDown?.postDelayed(this, 10)
+                }
             }
         }
 
-        handler?.postDelayed(runnable as Runnable, 10)
+        handlerDown?.postDelayed(runnableDown as Runnable, 10)
     }
 
     private fun stopTimerDown() {
-        runnable?.let { handler?.removeCallbacks(it) }
+        runnableDown?.let { handlerDown?.removeCallbacks(it) }
     }
 }
