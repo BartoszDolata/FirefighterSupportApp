@@ -67,12 +67,11 @@
 
             <Spinner
                 android:id="@+id/firefighter1"
-                android:layout_width="match_parent"
+                android:layout_width="211dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:spinnerMode="dropdown"
-                />
+                android:spinnerMode="dropdown" />
 
             <EditText
                 android:id="@+id/ff1_check1"
