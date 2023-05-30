@@ -2,31 +2,28 @@ package com.example.firefightersupportapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Layout.Alignment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
-import java.awt.font.TextAttribute
 
 
 class DatabaseActivity : AppCompatActivity() {
     private lateinit var database : DBHelper
+    private lateinit var table : TableLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_database)
         database = DBHelper(this, null)
+        table = findViewById(R.id.table)
         renderView()
     }
 
     private fun renderView() {
         val firefighters = getData()
-
-        val table = findViewById(R.id.table) as TableLayout
         for (firefighter in firefighters) {
             val tr = TableRow(this)
 
@@ -61,6 +58,39 @@ class DatabaseActivity : AppCompatActivity() {
             table.addView(tr)
         }
 
+        table.requestLayout()
+    }
+
+    private fun renderRow(name: String, surname: String, nick: String) {
+        val tr = TableRow(this)
+
+        val nameTv = TextView(this)
+        nameTv.text = name
+        nameTv.textSize = 15.0F
+        nameTv.setPadding(5)
+
+        val surnameTv = TextView(this)
+        surnameTv.text = surname
+
+        val nickTv = TextView(this)
+        nickTv.text = nick
+
+        // Ustaw szerokość kolumn
+        val weightSum = 3.0f // Suma wag kolumn
+        val params = TableRow.LayoutParams(
+            0,
+            TableRow.LayoutParams.WRAP_CONTENT,
+            1.0f / weightSum
+        )
+        nameTv.layoutParams = params
+        surnameTv.layoutParams = params
+        nickTv.layoutParams = params
+
+        tr.addView(nameTv)
+        tr.addView(surnameTv)
+        tr.addView(nickTv)
+
+        table.addView(tr)
         table.requestLayout()
     }
 
@@ -107,7 +137,8 @@ class DatabaseActivity : AppCompatActivity() {
                 Toast.makeText(this@DatabaseActivity, "Dodano pomyślnie", Toast.LENGTH_SHORT).show()
             }
             popupWindow.dismiss()
-            renderView()
+
+            renderRow(name, surname, nick)
         }
     }
 

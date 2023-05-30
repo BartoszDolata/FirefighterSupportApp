@@ -19,9 +19,14 @@ import java.util.concurrent.TimeUnit
 
 class FireBrigadeFragment : Fragment() {
 
+    private lateinit var database : DBHelper
+    private lateinit var options : List<String>
+
     private lateinit var view: View
     private lateinit var timer: TextView
     private lateinit var btn_end: Button
+    private lateinit var f1_spinner: Spinner
+    private lateinit var f2_spinner: Spinner
 
     private var handler: Handler? = null
     private var handlerDown: Handler? = null
@@ -29,23 +34,25 @@ class FireBrigadeFragment : Fragment() {
     private var runnableDown: Runnable? = null
     private var lastTime: Date = Date()
     private var lastMinPressure: Int = 0
-
-    private lateinit var btn_check1: Button
-    private lateinit var ff1_check1: EditText
-    private lateinit var ff2_check1: EditText
-    private lateinit var btn_check2: Button
-    private lateinit var ff1_check2: EditText
-    private lateinit var ff2_check2: EditText
-    private lateinit var btn_check3: Button
-    private lateinit var ff1_check3: EditText
-    private lateinit var ff2_check3: EditText
-    private lateinit var btn_check4: Button
-    private lateinit var ff1_check4: EditText
-    private lateinit var ff2_check4: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        database = DBHelper(requireContext(), null)
+        options = database.getNames()
     }
 
+    override fun onResume() {
+        super.onResume()
+        options = database.getNames()
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            options
+        )
+        f1_spinner.adapter = adapter
+        f1_spinner.setSelection(options.indexOf(""))
+        f2_spinner.adapter = adapter
+        f2_spinner.setSelection(options.indexOf(""))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,14 +61,14 @@ class FireBrigadeFragment : Fragment() {
         view = inflater.inflate(R.layout.fragment_fire_brigade, container, false)
         timer = view.findViewById(R.id.Timer)
         btn_end = view.findViewById(R.id.btn_end1)
+        f1_spinner = view.findViewById(R.id.firefighter1)
+        f2_spinner = view.findViewById(R.id.firefighter2)
 
         setupButtonListener(R.id.btn_check1, R.id.ff1_check1, R.id.ff2_check1)
         setupButtonListener(R.id.btn_check2, R.id.ff1_check2, R.id.ff2_check2)
         setupButtonListener(R.id.btn_check3, R.id.ff1_check3, R.id.ff2_check3)
         setupButtonListener(R.id.btn_check4, R.id.ff1_check4, R.id.ff2_check4)
-        val f1_spinner = view.findViewById<Spinner>(R.id.firefighter1)
-        val f2_spinner = view.findViewById<Spinner>(R.id.firefighter2)
-        val options = DBHelper(requireContext(), null).getNames()
+
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -90,8 +97,8 @@ class FireBrigadeFragment : Fragment() {
         val ff2 = view.findViewById<EditText>(ff2Id)
 
         button.setOnClickListener {
-            var ff1_val = ff1.text.toString().toIntOrNull()
-            var ff2_val = ff2.text.toString().toIntOrNull()
+            val ff1_val = ff1.text.toString().toIntOrNull()
+            val ff2_val = ff2.text.toString().toIntOrNull()
             if(ff1_val == null || ff2_val == null){
                 showAlertDialog("Uwaga", "Wartości ciśnienia strażaków nie mogą pozostać puste")
             } else {
